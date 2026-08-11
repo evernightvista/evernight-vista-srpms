@@ -1,39 +1,33 @@
 Name:           nvidia-driver-manager
-Version:        1.0.0
+Version:        45.0.0
 Release:        1%{?dist}
 Summary:        NVIDIA driver manager for Fedora
 
-License:        GPLv3
-URL:            https://github.com/example/nvidia-driver-manager
+License:        GPL-3.0-or-later
 Source0:        %{name}-%{version}.tar.gz
 
-BuildRequires:  cmake
 BuildRequires:  gcc-c++
+BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  kf6-kcoreaddons-devel
 BuildRequires:  kf6-kwidgetsaddons-devel
 BuildRequires:  kf6-ki18n-devel
 BuildRequires:  kf6-kcrash-devel
-BuildRequires:  gettext
 BuildRequires:  desktop-file-utils
-Requires:       qt6-qtbase
-Requires:       kf6-kcoreaddons
-Requires:       kf6-kwidgetsaddons
-Requires:       kf6-ki18n
-Requires:       kf6-kcrash
-Requires:       polkit
-Requires:       mokutil
-Requires:       openssl
+BuildRequires:  gettext
+
 Requires:       pciutils
+Requires:       rpm
+Requires:       mokutil
+Requires:       polkit
+Requires:       dnf
 
 %description
-A Qt6/KF6-based utility to manage NVIDIA drivers on Fedora.
-It can detect NVIDIA GPUs, list available driver branches (latest,
-580, 470, 390, 340), install or switch drivers, and optionally
-set up Machine Owner Key (MOK) for Secure Boot.
-Before installation, it verifies administrator privileges
-using Polkit.
+NVIDIA Driver Manager is a Qt/KF6 graphical utility for Fedora.
+It detects NVIDIA GPUs, lets users select NVIDIA driver branches,
+supports Secure Boot MOK enrollment, and installs the matching CUDA
+driver package.
 
 %prep
 %autosetup
@@ -44,16 +38,22 @@ using Polkit.
 
 %install
 %cmake_install
+%find_lang %{name}
 
-%find_lang %{name} --with-qt
-
-# Validate desktop file if present
-desktop-file-validate %{buildroot}%{_datadir}/applications/nvidia-driver-manager.desktop 2>/dev/null || true
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 %files -f %{name}.lang
-%{_bindir}/nvidia-driver-manager
-%{_datadir}/applications/nvidia-driver-manager.desktop
+%license LICENSE
+%{_bindir}/%{name}
+%{_libexecdir}/nvidia-driver-manager-helper
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/polkit-1/actions/org.fedoraproject.nvidia-driver-manager.policy
 
 %changelog
-* Mon Aug 10 2026 KairikiFedora <13278297951@sina.cn> - 1.0.0-1
-- Initial release
+* Tue Aug 11 2026 KairikiFedora <13278297951@sina.cn> - 45.0.0-1
+- Rewritten NVIDIA driver manager with GPU detection, driver branch selection,
+  Secure Boot MOK support, --skip detection override, and CUDA package handling.
+- Install akmods-evernight automatically at runtime when needed, use one Polkit
+  authentication for the whole install flow, and add zh_CN/zh_TW/ja/de/ko/fr
+  translations.
