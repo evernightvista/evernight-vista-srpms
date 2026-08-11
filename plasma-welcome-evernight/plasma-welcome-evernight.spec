@@ -16,6 +16,7 @@ BuildRequires: kf6-rpm-macros
 Requires:  plasma-welcome
 Requires:  nvidia-driver-manager
 Requires:  /usr/bin/yumex
+Requires:  evernight-vista-repo-gui
 Requires:  evernight-vista-logo
 
 %description
