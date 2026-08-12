@@ -1,5 +1,5 @@
 Name:           evernight-vista-grub-config
-Version:        1.0.0
+Version:        45.0.0
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 GRUB2 configuration tool for Evernight Vista
 
@@ -55,5 +55,5 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.evernight.vista.g
 
 
 %changelog
-* Tue Aug 11 2026 Evernight Vista <13278297951@sina.cn> - 1.0.0-1
+* Wed Aug 12 2026 Evernight Vista <13278297951@sina.cn> - 45.0.0-1
 - Initial RPM package.
