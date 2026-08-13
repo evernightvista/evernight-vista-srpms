@@ -17,7 +17,7 @@ BuildRequires:  kf6-ki18n-devel
 BuildRequires:  kf6-kwidgetsaddons-devel
 
 Requires:       dnf5
-Requires:       dnf
+Requires:       /usr/bin/dnf-3
 Requires:       polkit
 Requires:       rpm
 Requires:       tar
