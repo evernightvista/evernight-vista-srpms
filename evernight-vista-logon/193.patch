@@ -1,0 +1,91 @@
+From fd5f8389440557854dc26f0261086a82b49171d2 Mon Sep 17 00:00:00 2001
+From: Kristen McWilliam <kristen@kde.org>
+Date: Wed, 5 Aug 2026 15:52:52 -0400
+Subject: [PATCH] frontend/greeter: add button to show the on-screen keyboard
+
+Adds a button that shows the OSK (on-screen keyboard), regardless of
+whether it is tapped with a touchscreen or a mouse.
+
+Resolves: https://invent.kde.org/plasma/plasma-login-manager/-/work_items/52
+---
+ src/frontend/greeter/qml/Login.qml |  3 ++-
+ src/frontend/greeter/qml/Main.qml  | 35 +++++++++++++++++++++++++++++-
+ 2 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/src/frontend/greeter/qml/Login.qml b/src/frontend/greeter/qml/Login.qml
+index e222c884..97411aac 100644
+--- a/src/frontend/greeter/qml/Login.qml
++++ b/src/frontend/greeter/qml/Login.qml
+@@ -10,6 +10,7 @@ import org.kde.breeze.components
+ import QtQuick 2.15
+ import QtQuick.Layouts 1.15
+ import QtQuick.Controls 2.15 as QQC2
++import QtQuick.Templates as T
+ 
+ import org.kde.plasma.components 3.0 as PlasmaComponents3
+ import org.kde.plasma.extras 2.0 as PlasmaExtras
+@@ -19,7 +20,7 @@ import org.kde.plasma.login as PlasmaLogin
+ 
+ SessionManagementScreen {
+     id: root
+-    property Item mainPasswordBox: passwordBox
++    property T.TextField mainPasswordBox: passwordBox
+ 
+     property bool showUsernamePrompt: !showUserList
+ 
+diff --git a/src/frontend/greeter/qml/Main.qml b/src/frontend/greeter/qml/Main.qml
+index c06626e6..209d4a4a 100644
+--- a/src/frontend/greeter/qml/Main.qml
++++ b/src/frontend/greeter/qml/Main.qml
+@@ -352,6 +352,17 @@ Item {
+             }
+         }
+ 
++        BreezeComponents.VirtualKeyboardLoader {
++            id: inputPanel
++
++            z: 1
++
++            screenRoot: loginScreenRoot
++            mainStack: mainStack
++            mainBlock: userListComponent
++            passwordField: userListComponent.mainPasswordBox
++        }
++
+         RowLayout {
+             id: footer
+             anchors.bottom: parent.bottom
+@@ -367,7 +378,29 @@ Item {
+                 }
+             }
+ 
+-            /* Virtual keyboard btn */
++            PlasmaComponents.ToolButton {
++                id: virtualKeyboardButton
++
++                focusPolicy: Qt.TabFocus
++                text: i18ndc("plasma_shell_org.kde.plasma.desktop", "Button to show/hide virtual keyboard", "Virtual Keyboard")
++                icon.name: inputPanel.keyboardActive ? "input-keyboard-virtual-hide-symbolic" : "input-keyboard-virtual-show-symbolic"
++                onClicked: {
++                    // Otherwise the password field loses focus and virtual keyboard
++                    // keystrokes get eaten
++                    userListComponent.mainPasswordBox.forceActiveFocus();
++                    inputPanel.showHide()
++                }
++
++                visible: inputPanel.status === Loader.Ready
++
++                Layout.fillHeight: true
++                containmentMask: Item {
++                    parent: virtualKeyboardButton
++                    anchors.fill: parent
++                    anchors.leftMargin: -footer.anchors.margins
++                    anchors.bottomMargin: -footer.anchors.margins
++                }
++            }
+ 
+             KeyboardButton {
+                 id: keyboardButton
+-- 
+GitLab
+
