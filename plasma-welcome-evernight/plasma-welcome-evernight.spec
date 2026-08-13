@@ -17,7 +17,7 @@ Requires:  plasma-welcome
 Requires:  nvidia-driver-manager
 Requires:  /usr/bin/yumex
 Requires:  evernight-vista-repo-gui
-Requires:  evernight-vista-logo
+Requires:  evernight-vista-logos
 
 %description
 %{summary}.
