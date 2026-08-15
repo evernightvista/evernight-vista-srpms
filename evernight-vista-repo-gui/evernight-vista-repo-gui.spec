@@ -1,10 +1,10 @@
 Name:           evernight-vista-repo-gui
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        GUI tool for managing Evernight Vista repository mirrors
 
 License:        GPL-3.0-or-later
-URL:            https://example.invalid/%{name}
+URL:            https://github.com/evernightvista/evernight-vista-repo-gui
 Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
@@ -19,6 +19,7 @@ BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6WidgetsAddons)
 
 Requires:       polkit
+Requires:       evernight-vista-repos
 
 %description
 Evernight Vista Repo GUI is a graphical utility for managing repository
@@ -55,5 +56,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/evernight-vista-repo-
 
 
 %changelog
+* Sat Aug 15 2026 KairikiFedora <13278297951@sina.cn> - 1.0.1-1
+- Fix Detect repo bug
+
 * Tue Aug 11 2026 KairikiFedora <13278297951@sina.cn> - 1.0.0-1
 - Package GUI executable, helper executable, desktop file, Polkit policy, and translations
